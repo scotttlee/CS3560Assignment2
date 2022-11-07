@@ -9,12 +9,22 @@
  */
 public class Driver extends javax.swing.JFrame {
 
+    private static Driver singleDriver;
+    
     /**
      * Creates new form Driver
      */
-    public Driver() {
+    private Driver() {
         initComponents();
     }
+    
+    public static Driver getInstance() {
+        if(singleDriver == null){
+            singleDriver = new Driver();
+        }
+        return singleDriver;
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -84,6 +94,11 @@ public class Driver extends javax.swing.JFrame {
         addGroup.setText("Add Group");
 
         openUserView.setText("Open User View");
+        openUserView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openUserViewActionPerformed(evt);
+            }
+        });
 
         showUserTotal.setText("Show User Total");
 
@@ -165,6 +180,12 @@ public class Driver extends javax.swing.JFrame {
     private void addUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_addUserActionPerformed
+
+    private void openUserViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openUserViewActionPerformed
+        // TODO add your handling code here:
+        UserView student = new UserView();
+        student.setVisible(true);
+    }//GEN-LAST:event_openUserViewActionPerformed
 
     /**
      * @param args the command line arguments
