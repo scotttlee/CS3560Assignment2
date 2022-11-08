@@ -1,3 +1,8 @@
+
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeSelectionModel;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -50,38 +55,10 @@ public class AdminView extends javax.swing.JFrame {
         showPositivePercentage = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(600, 400));
+        setPreferredSize(new java.awt.Dimension(600, 410));
         getContentPane().setLayout(null);
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Root");
-        javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("john");
-        treeNode1.add(treeNode2);
-        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("bob");
-        treeNode1.add(treeNode2);
-        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("steve");
-        treeNode1.add(treeNode2);
-        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("CS3560");
-        javax.swing.tree.DefaultMutableTreeNode treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("stu1");
-        treeNode2.add(treeNode3);
-        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("stu2");
-        treeNode2.add(treeNode3);
-        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("stu3");
-        treeNode2.add(treeNode3);
-        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("CS3560 Session 01");
-        javax.swing.tree.DefaultMutableTreeNode treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("stu8");
-        treeNode3.add(treeNode4);
-        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("stu9");
-        treeNode3.add(treeNode4);
-        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("stu10");
-        treeNode3.add(treeNode4);
-        treeNode2.add(treeNode3);
-        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("stu4");
-        treeNode2.add(treeNode3);
-        treeNode1.add(treeNode2);
-        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("oostu");
-        treeNode1.add(treeNode2);
-        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("ppstu2");
-        treeNode1.add(treeNode2);
         usersTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         jScrollPane1.setViewportView(usersTree);
 
@@ -101,6 +78,11 @@ public class AdminView extends javax.swing.JFrame {
 
         addGroup.setText("Add Group");
         addGroup.setPreferredSize(new java.awt.Dimension(180, 20));
+        addGroup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addGroupActionPerformed(evt);
+            }
+        });
         getContentPane().add(addGroup);
         addGroup.setBounds(434, 91, 149, 80);
 
@@ -165,6 +147,18 @@ public class AdminView extends javax.swing.JFrame {
 
     private void addUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserActionPerformed
         // TODO add your handling code here:
+        TreeSelectionModel check = usersTree.getSelectionModel();
+        
+        if(check.getSelectionCount() > 0){
+            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)usersTree.getSelectionPath().getLastPathComponent();
+            DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(userID.getText());
+        
+            selectedNode.add(newNode);
+        
+            DefaultTreeModel model = (DefaultTreeModel)usersTree.getModel();
+        
+            model.reload();
+        }
     }//GEN-LAST:event_addUserActionPerformed
 
     private void openUserViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openUserViewActionPerformed
@@ -180,6 +174,23 @@ public class AdminView extends javax.swing.JFrame {
     private void showMessagesTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showMessagesTotalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_showMessagesTotalActionPerformed
+
+    private void addGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGroupActionPerformed
+        // TODO add your handling code here:
+        TreeSelectionModel check = usersTree.getSelectionModel();
+        
+        if(check.getSelectionCount() > 0){
+            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)usersTree.getSelectionPath().getLastPathComponent();
+            DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(groupID.getText());
+        
+            selectedNode.add(newNode);
+            
+            
+            DefaultTreeModel model = (DefaultTreeModel)usersTree.getModel();
+        
+            model.reload();
+        }
+    }//GEN-LAST:event_addGroupActionPerformed
 
     /**
      * @param args the command line arguments
@@ -212,7 +223,7 @@ public class AdminView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                //new AdminView().setVisible(true);
+                new AdminView().setVisible(true);
             }
         });
     }
