@@ -36,7 +36,7 @@ public class UserView extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         newsFeed = new javax.swing.JList<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(600, 400));
 
         userID.setColumns(20);
