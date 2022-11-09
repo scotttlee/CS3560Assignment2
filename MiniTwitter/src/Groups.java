@@ -28,6 +28,7 @@ public class Groups implements usersInterface{
     public void setUsername(String a){
         username = a;
     }
+    
     @Override
     public String getID(){
         return this.userID;
@@ -38,6 +39,11 @@ public class Groups implements usersInterface{
         return this.username;
     }
     
+    @Override
+    public String toString(){
+        return username;
+    }
+    
     public void addUser(usersInterface user){
         childUsers.add(user);
         counter++;
@@ -45,5 +51,9 @@ public class Groups implements usersInterface{
     
     public int getTotalUsers(){
         return counter;
+    }
+    
+    public void setRootName(){
+        username = "root";
     }
 }

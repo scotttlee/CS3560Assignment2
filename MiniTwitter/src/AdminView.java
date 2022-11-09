@@ -15,10 +15,14 @@ import java.awt.Component;
  * @author scottlee
  */
 public class AdminView extends javax.swing.JFrame {
-    
-    
+
+
     Groups userGroups = new Groups();
     Groups groupGroups = new Groups();
+    
+    //groupGroups.setRootName();
+    
+    
     private int totalUsers;
     private int totalGroups;
 
@@ -28,9 +32,12 @@ public class AdminView extends javax.swing.JFrame {
      * Creates new form Driver
      */
     private AdminView() {
+        groupGroups.setRootName();
         initComponents();
+        
+        
     }
-    
+
     public static AdminView getInstance() {
         if(singleDriver == null){
             singleDriver = new AdminView();
@@ -38,6 +45,7 @@ public class AdminView extends javax.swing.JFrame {
         return singleDriver;
     }
     
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -63,14 +71,10 @@ public class AdminView extends javax.swing.JFrame {
         showPositivePercentage = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(null);
 
-        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Root");
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode(groupGroups);
         usersTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         jScrollPane1.setViewportView(usersTree);
-
-        getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(6, 6, 194, 365);
 
         addUser.setText("Add User");
         addUser.setPreferredSize(new java.awt.Dimension(180, 20));
@@ -79,9 +83,6 @@ public class AdminView extends javax.swing.JFrame {
                 addUserActionPerformed(evt);
             }
         });
-        getContentPane().add(addUser);
-        addUser.setBounds(434, 6, 149, 79);
-        addUser.getAccessibleContext().setAccessibleName("addUser");
 
         addGroup.setText("Add Group");
         addGroup.setPreferredSize(new java.awt.Dimension(180, 20));
@@ -90,8 +91,6 @@ public class AdminView extends javax.swing.JFrame {
                 addGroupActionPerformed(evt);
             }
         });
-        getContentPane().add(addGroup);
-        addGroup.setBounds(434, 91, 149, 80);
 
         openUserView.setText("Open User View");
         openUserView.addActionListener(new java.awt.event.ActionListener() {
@@ -99,8 +98,6 @@ public class AdminView extends javax.swing.JFrame {
                 openUserViewActionPerformed(evt);
             }
         });
-        getContentPane().add(openUserView);
-        openUserView.setBounds(206, 177, 377, 70);
 
         showUserTotal.setText("Show User Total");
         showUserTotal.setPreferredSize(new java.awt.Dimension(180, 20));
@@ -109,8 +106,6 @@ public class AdminView extends javax.swing.JFrame {
                 showUserTotalActionPerformed(evt);
             }
         });
-        getContentPane().add(showUserTotal);
-        showUserTotal.setBounds(206, 253, 190, 62);
 
         showMessagesTotal.setText("Show Total Messages");
         showMessagesTotal.setPreferredSize(new java.awt.Dimension(180, 20));
@@ -119,8 +114,6 @@ public class AdminView extends javax.swing.JFrame {
                 showMessagesTotalActionPerformed(evt);
             }
         });
-        getContentPane().add(showMessagesTotal);
-        showMessagesTotal.setBounds(206, 321, 190, 50);
 
         showGroupTotal.setText("Show Group Total");
         showGroupTotal.setPreferredSize(new java.awt.Dimension(180, 20));
@@ -129,24 +122,16 @@ public class AdminView extends javax.swing.JFrame {
                 showGroupTotalActionPerformed(evt);
             }
         });
-        getContentPane().add(showGroupTotal);
-        showGroupTotal.setBounds(402, 253, 181, 62);
 
         groupID.setColumns(20);
         groupID.setRows(5);
         groupID.setPreferredSize(new java.awt.Dimension(180, 20));
         jScrollPane4.setViewportView(groupID);
 
-        getContentPane().add(jScrollPane4);
-        jScrollPane4.setBounds(206, 91, 222, 80);
-
         userID.setColumns(20);
         userID.setRows(5);
         userID.setPreferredSize(new java.awt.Dimension(180, 20));
         jScrollPane5.setViewportView(userID);
-
-        getContentPane().add(jScrollPane5);
-        jScrollPane5.setBounds(206, 6, 222, 79);
 
         showPositivePercentage.setText("Show Positive Percentage");
         showPositivePercentage.setPreferredSize(new java.awt.Dimension(180, 20));
@@ -155,8 +140,61 @@ public class AdminView extends javax.swing.JFrame {
                 showPositivePercentageActionPerformed(evt);
             }
         });
-        getContentPane().add(showPositivePercentage);
-        showPositivePercentage.setBounds(402, 321, 181, 50);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(addUser, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(addGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(openUserView, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(showUserTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(showGroupTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(showMessagesTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(showPositivePercentage, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(addUser, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(addGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(6, 6, 6)
+                        .addComponent(openUserView, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(showUserTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(showGroupTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(showMessagesTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(showPositivePercentage, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+        );
+
+        addUser.getAccessibleContext().setAccessibleName("addUser");
 
         pack();
         setLocationRelativeTo(null);
@@ -165,29 +203,32 @@ public class AdminView extends javax.swing.JFrame {
     private void addUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserActionPerformed
         // TODO add your handling code here:
         TreeSelectionModel check = usersTree.getSelectionModel();
-        
+
         if(check.getSelectionCount() > 0){
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)usersTree.getSelectionPath().getLastPathComponent();
-            DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(userID.getText());
+            //DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(userID.getText());
             Users newUser = new Users();
+            DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newUser);
             newUser.setUsername(userID.getText());
-        
+
             selectedNode.add(newNode);
-            
-            
+
+
             userGroups.addUser(newUser);
-            
+
             DefaultTreeModel model = (DefaultTreeModel)usersTree.getModel();
-            
-        
+
+
             model.reload();
         }
     }//GEN-LAST:event_addUserActionPerformed
 
     private void openUserViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openUserViewActionPerformed
         // TODO add your handling code here:
+        DefaultMutableTreeNode selectedUser = (DefaultMutableTreeNode)usersTree.getSelectionPath().getLastPathComponent();
+        Users openUser = (Users)selectedUser.getUserObject();
         
-        UserView student = new UserView();
+        UserView student = new UserView(openUser);
         student.setVisible(true);
     }//GEN-LAST:event_openUserViewActionPerformed
 
@@ -202,21 +243,22 @@ public class AdminView extends javax.swing.JFrame {
     private void addGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGroupActionPerformed
         // TODO add your handling code here:
         TreeSelectionModel check = usersTree.getSelectionModel();
-        
+
         if(check.getSelectionCount() > 0){
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)usersTree.getSelectionPath().getLastPathComponent();
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(groupID.getText());
-            
+
             Groups newGroup = new Groups();
             newGroup.setUsername(groupID.getText());
+            
             groupGroups.addUser(newGroup);
-            
+
             selectedNode.add(newNode);
-            
-            
-            
+
+
+
             DefaultTreeModel model = (DefaultTreeModel)usersTree.getModel();
-        
+
             model.reload();
         }
     }//GEN-LAST:event_addGroupActionPerformed
@@ -241,7 +283,7 @@ public class AdminView extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -261,7 +303,7 @@ public class AdminView extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-        
+
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {

@@ -29,5 +29,10 @@ public class Users implements usersInterface{
         return this.username;
     }
     
+    @Override
+    public String toString(){
+        return username;
+    }
+    
   
 }
