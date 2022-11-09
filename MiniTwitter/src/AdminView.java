@@ -3,6 +3,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 import javax.swing.JOptionPane;
+import java.awt.Component;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -15,8 +16,11 @@ import javax.swing.JOptionPane;
  */
 public class AdminView extends javax.swing.JFrame {
     
-    Groups newGroup = new Groups();
+    
+    Groups userGroups = new Groups();
+    Groups groupGroups = new Groups();
     private int totalUsers;
+    private int totalGroups;
 
     private static AdminView singleDriver = new AdminView();
     
@@ -120,6 +124,11 @@ public class AdminView extends javax.swing.JFrame {
 
         showGroupTotal.setText("Show Group Total");
         showGroupTotal.setPreferredSize(new java.awt.Dimension(180, 20));
+        showGroupTotal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showGroupTotalActionPerformed(evt);
+            }
+        });
         getContentPane().add(showGroupTotal);
         showGroupTotal.setBounds(402, 253, 181, 62);
 
@@ -166,7 +175,7 @@ public class AdminView extends javax.swing.JFrame {
             selectedNode.add(newNode);
             
             
-            newGroup.addUser(newUser);
+            userGroups.addUser(newUser);
             
             DefaultTreeModel model = (DefaultTreeModel)usersTree.getModel();
             
@@ -198,8 +207,9 @@ public class AdminView extends javax.swing.JFrame {
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)usersTree.getSelectionPath().getLastPathComponent();
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(groupID.getText());
             
-            Groups newGroups = new Groups();
-            newGroups.setUsername(groupID.getText());
+            Groups newGroup = new Groups();
+            newGroup.setUsername(groupID.getText());
+            groupGroups.addUser(newGroup);
             
             selectedNode.add(newNode);
             
@@ -213,10 +223,16 @@ public class AdminView extends javax.swing.JFrame {
 
     private void showUserTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showUserTotalActionPerformed
         // TODO add your handling code here:
-        totalUsers = newGroup.getTotalUsers();
+        totalUsers = userGroups.getTotalUsers();
         //System.out.println(totalUsers);
         JOptionPane.showMessageDialog(null, "Total Users: " + totalUsers);
     }//GEN-LAST:event_showUserTotalActionPerformed
+
+    private void showGroupTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showGroupTotalActionPerformed
+        // TODO add your handling code here:
+        totalGroups = groupGroups.getTotalUsers();
+        JOptionPane.showMessageDialog(null, "Total Groups: " + totalGroups);
+    }//GEN-LAST:event_showGroupTotalActionPerformed
 
     /**
      * @param args the command line arguments
@@ -245,6 +261,7 @@ public class AdminView extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
+        
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
