@@ -2,6 +2,7 @@
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
+import javax.swing.JOptionPane;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -15,6 +16,7 @@ import javax.swing.tree.TreeSelectionModel;
 public class AdminView extends javax.swing.JFrame {
     
     Groups newGroup = new Groups();
+    private int totalUsers;
 
     private static AdminView singleDriver = new AdminView();
     
@@ -57,7 +59,6 @@ public class AdminView extends javax.swing.JFrame {
         showPositivePercentage = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(600, 410));
         getContentPane().setLayout(null);
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Root");
@@ -99,6 +100,11 @@ public class AdminView extends javax.swing.JFrame {
 
         showUserTotal.setText("Show User Total");
         showUserTotal.setPreferredSize(new java.awt.Dimension(180, 20));
+        showUserTotal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showUserTotalActionPerformed(evt);
+            }
+        });
         getContentPane().add(showUserTotal);
         showUserTotal.setBounds(206, 253, 190, 62);
 
@@ -171,7 +177,7 @@ public class AdminView extends javax.swing.JFrame {
 
     private void openUserViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openUserViewActionPerformed
         // TODO add your handling code here:
-        newGroup.printUsers();
+        
         UserView student = new UserView();
         student.setVisible(true);
     }//GEN-LAST:event_openUserViewActionPerformed
@@ -204,6 +210,13 @@ public class AdminView extends javax.swing.JFrame {
             model.reload();
         }
     }//GEN-LAST:event_addGroupActionPerformed
+
+    private void showUserTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showUserTotalActionPerformed
+        // TODO add your handling code here:
+        totalUsers = newGroup.getTotalUsers();
+        //System.out.println(totalUsers);
+        JOptionPane.showMessageDialog(null, "Total Users: " + totalUsers);
+    }//GEN-LAST:event_showUserTotalActionPerformed
 
     /**
      * @param args the command line arguments

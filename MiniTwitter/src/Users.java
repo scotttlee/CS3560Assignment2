@@ -29,8 +29,5 @@ public class Users implements usersInterface{
         return this.username;
     }
     
-    @Override
-    public void printUsers(){
-        System.out.println(username);
-    }
+  
 }

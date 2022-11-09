@@ -15,5 +15,5 @@ public interface usersInterface {
     
     public String getUsername();
     
-    public void printUsers();
+
 }

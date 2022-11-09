@@ -15,6 +15,7 @@ import java.util.UUID;
 public class Groups implements usersInterface{
     private String userID;
     private String username;
+    private int counter;
     
     private List<usersInterface> childUsers;
     
@@ -39,9 +40,10 @@ public class Groups implements usersInterface{
     
     public void addUser(usersInterface user){
         childUsers.add(user);
+        counter++;
     }
     
-    public void printUsers(){
-        childUsers.forEach(usersInterface::printUsers);
+    public int getTotalUsers(){
+        return counter;
     }
 }
