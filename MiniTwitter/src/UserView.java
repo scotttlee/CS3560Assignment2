@@ -1,5 +1,9 @@
 
-import java.util.Enumeration;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+import javax.swing.ListModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
@@ -15,11 +19,16 @@ import javax.swing.tree.TreeNode;
 public class UserView extends javax.swing.JFrame {
 
     DefaultMutableTreeNode root;
+    Users currentUsername;
+    DefaultListModel followerList = new DefaultListModel();
+    List<Users> followers = new ArrayList<>();
+    
+    
     /**
      * Creates new form UserView
      */
     public UserView(Users user) {
-        Users currentUsername = user;
+        currentUsername = user;
         String username = currentUsername.getUsername();
         root = currentUsername.getRoot();
         
@@ -28,42 +37,31 @@ public class UserView extends javax.swing.JFrame {
         
     }
     
-    public void findUser(DefaultMutableTreeNode node, String username) {
+    public void findUser(Users user, DefaultMutableTreeNode node, String username) {
 
         int childCount = node.getChildCount();
-        System.out.println("child count: " + childCount);
-        //System.out.println("child count = " + childCount);
-
-        //System.out.println(node);
-        //System.out.println("username: " + username);
 
         for (int i = 0; i < childCount; i++) {
             
-            System.out.println("iterations: " + i);
             DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) node.getChildAt(i);
-            System.out.println(childNode.toString());
-            //System.out.println(childNode.getChildCount());
             if(childNode.isLeaf()) {
                 Users childUser = (Users) childNode.getUserObject();
-                System.out.println("child user: " + childUser);
-                //System.out.println(childUser.toString());
                 if(childUser.toString().equals(username)){
-                    System.out.println("found " + childUser.toString());
-                    //return;
+                    followerList.addElement(childUser);
+                    currentUsername.addFollowers(childUser);
+                    System.out.println(currentUsername.getFollowers());
                 }
             }
             if(childNode.getAllowsChildren()){
-                //i++;
-                System.out.println("recursive call");
-                findUser(childNode, username);
+                findUser(currentUsername, childNode, username);
             }
             if(i+1 == childCount){
                 return;
             }
-        }
-            
+        }      
     }
-  
+    
+    
     
 
     /**
@@ -88,7 +86,6 @@ public class UserView extends javax.swing.JFrame {
         currentUser = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(600, 410));
 
         userID.setColumns(20);
         userID.setRows(5);
@@ -101,11 +98,7 @@ public class UserView extends javax.swing.JFrame {
             }
         });
 
-        currentFollowing.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        currentFollowing.setModel(followerList);
         jScrollPane2.setViewportView(currentFollowing);
 
         tweetMessage.setColumns(20);
@@ -115,7 +108,7 @@ public class UserView extends javax.swing.JFrame {
         postTweet.setText("Post Tweet");
 
         newsFeed.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { "News Feed" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -175,7 +168,8 @@ public class UserView extends javax.swing.JFrame {
 
     private void followUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_followUserActionPerformed
         // TODO add your handling code here:
-        findUser(root, userID.getText());
+        findUser(currentUsername, root, userID.getText());
+        
     }//GEN-LAST:event_followUserActionPerformed
 
     /**
