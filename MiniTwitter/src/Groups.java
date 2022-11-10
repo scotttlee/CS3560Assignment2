@@ -52,12 +52,7 @@ public class Groups implements usersInterface{
     public int getTotalUsers(){
         return counter;
     }
-    
-    public boolean isGroup(){
-        return false;
-    }
-    
-    
+
     @Override
     public DefaultMutableTreeNode getRoot(){
         return root;
