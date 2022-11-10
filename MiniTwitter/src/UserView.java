@@ -34,10 +34,10 @@ public class UserView extends javax.swing.JFrame {
         //System.out.println("child count = " + childCount);
 
         //System.out.println(node);
-        System.out.println("username: " + username);
+        //System.out.println("username: " + username);
 
         for (int i = 0; i < childCount; i++) {
-
+            System.out.println(i);
             DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) node.getChildAt(i);
             //System.out.println(childNode.toString());
             //System.out.println(childNode.getChildCount());
@@ -49,7 +49,7 @@ public class UserView extends javax.swing.JFrame {
                     break;
                 }
             }
-            if(childNode.getAllowsChildren() == true){
+            else{
                 i++;
                 findUser(childNode, username);
             }
