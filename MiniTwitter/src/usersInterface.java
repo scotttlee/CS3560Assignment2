@@ -19,7 +19,5 @@ public interface usersInterface {
     public String toString();
     
     public DefaultMutableTreeNode getRoot();
-    
-    
-    
+   
 }

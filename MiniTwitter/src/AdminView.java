@@ -24,13 +24,13 @@ public class AdminView extends javax.swing.JFrame {
     private int totalUsers;
     private int totalGroups;
 
-    private static AdminView singleDriver = new AdminView();
+    private static AdminView admin = new AdminView();
 
     public static AdminView getInstance() {
-        if(singleDriver == null){
-            singleDriver = new AdminView();
+        if(admin == null){
+            admin = new AdminView();
         }
-        return singleDriver;
+        return admin;
     }
     /**
      * Creates new form Driver
@@ -228,7 +228,7 @@ public class AdminView extends javax.swing.JFrame {
         DefaultMutableTreeNode selectedUser = (DefaultMutableTreeNode)usersTree.getSelectionPath().getLastPathComponent();
         Users openUser = (Users)selectedUser.getUserObject();
 
-        UserView student = new UserView(openUser);
+        UserView student = new UserView(openUser, rootGroup);
         student.setVisible(true);
     }//GEN-LAST:event_openUserViewActionPerformed
 

@@ -21,20 +21,21 @@ public class UserView extends javax.swing.JFrame {
     DefaultMutableTreeNode root;
     Users currentUsername;
     DefaultListModel followerList = new DefaultListModel();
-    List<Users> followers = new ArrayList<>();
+    DefaultListModel newsFeedList = new DefaultListModel();
+
     
     
     /**
      * Creates new form UserView
      */
-    public UserView(Users user) {
+    public UserView(Users user, Groups group) {
         currentUsername = user;
         String username = currentUsername.getUsername();
         root = currentUsername.getRoot();
-        
+        followerList = currentUsername.getFollowers();
+        newsFeedList = currentUsername.getNewsFeedList();
         initComponents();
         currentUser.setText(username);
-        
     }
     
     public void findUser(Users user, DefaultMutableTreeNode node, String username) {
@@ -47,9 +48,10 @@ public class UserView extends javax.swing.JFrame {
             if(childNode.isLeaf()) {
                 Users childUser = (Users) childNode.getUserObject();
                 if(childUser.toString().equals(username)){
-                    followerList.addElement(childUser);
                     currentUsername.addFollowers(childUser);
-                    System.out.println(currentUsername.getFollowers());
+                    childUser.attach(currentUsername);
+                    //followerList.addElement(childUser);
+                    
                 }
             }
             if(childNode.getAllowsChildren()){
@@ -106,12 +108,13 @@ public class UserView extends javax.swing.JFrame {
         jScrollPane3.setViewportView(tweetMessage);
 
         postTweet.setText("Post Tweet");
-
-        newsFeed.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "News Feed" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        postTweet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                postTweetActionPerformed(evt);
+            }
         });
+
+        newsFeed.setModel(newsFeedList);
         jScrollPane4.setViewportView(newsFeed);
 
         currentUser.setText("jLabel1");
@@ -171,6 +174,13 @@ public class UserView extends javax.swing.JFrame {
         findUser(currentUsername, root, userID.getText());
         
     }//GEN-LAST:event_followUserActionPerformed
+
+    private void postTweetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postTweetActionPerformed
+        // TODO add your handling code here:
+        String tweet = tweetMessage.getText();
+        currentUsername.tweet(tweet);
+        //newsFeedList.addElement(currentUsername.getNewsFeedList());
+    }//GEN-LAST:event_postTweetActionPerformed
 
     /**
      * @param args the command line arguments
