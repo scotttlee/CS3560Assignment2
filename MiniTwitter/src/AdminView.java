@@ -17,26 +17,14 @@ import java.awt.Component;
 public class AdminView extends javax.swing.JFrame {
 
 
-    Groups userGroups = new Groups();
-    Groups groupGroups = new Groups();
-    
-    //groupGroups.setRootName();
-    
-    
+    Groups rootGroup = new Groups("root");
+
+    private int userCounter;
+    private int groupCounter;
     private int totalUsers;
     private int totalGroups;
 
     private static AdminView singleDriver = new AdminView();
-    
-    /**
-     * Creates new form Driver
-     */
-    private AdminView() {
-        groupGroups.setRootName();
-        initComponents();
-        
-        
-    }
 
     public static AdminView getInstance() {
         if(singleDriver == null){
@@ -44,7 +32,16 @@ public class AdminView extends javax.swing.JFrame {
         }
         return singleDriver;
     }
-    
+    /**
+     * Creates new form Driver
+     */
+    private AdminView() {
+        initComponents();
+
+
+    }
+
+
 
 
     /**
@@ -72,7 +69,7 @@ public class AdminView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode(groupGroups);
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode(rootGroup);
         usersTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         jScrollPane1.setViewportView(usersTree);
 
@@ -204,22 +201,25 @@ public class AdminView extends javax.swing.JFrame {
         // TODO add your handling code here:
         TreeSelectionModel check = usersTree.getSelectionModel();
 
-        if(check.getSelectionCount() > 0){
+        if(check.getSelectionCount() > 0 ){
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)usersTree.getSelectionPath().getLastPathComponent();
-            //DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(userID.getText());
-            Users newUser = new Users();
-            DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newUser);
-            newUser.setUsername(userID.getText());
+            DefaultTreeModel model = (DefaultTreeModel) usersTree.getModel();
+
+            DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+
+            Users newUser = new Users(userID.getText(), root);
+            DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newUser, false);
 
             selectedNode.add(newNode);
 
 
-            userGroups.addUser(newUser);
+            rootGroup.addUser(newUser);
 
-            DefaultTreeModel model = (DefaultTreeModel)usersTree.getModel();
+            DefaultTreeModel modelRefresh = (DefaultTreeModel)usersTree.getModel();
 
 
-            model.reload();
+            modelRefresh.reload();
+            userCounter++;
         }
     }//GEN-LAST:event_addUserActionPerformed
 
@@ -227,7 +227,7 @@ public class AdminView extends javax.swing.JFrame {
         // TODO add your handling code here:
         DefaultMutableTreeNode selectedUser = (DefaultMutableTreeNode)usersTree.getSelectionPath().getLastPathComponent();
         Users openUser = (Users)selectedUser.getUserObject();
-        
+
         UserView student = new UserView(openUser);
         student.setVisible(true);
     }//GEN-LAST:event_openUserViewActionPerformed
@@ -246,12 +246,11 @@ public class AdminView extends javax.swing.JFrame {
 
         if(check.getSelectionCount() > 0){
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)usersTree.getSelectionPath().getLastPathComponent();
-            DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(groupID.getText());
+            DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(groupID.getText(), true);
 
-            Groups newGroup = new Groups();
-            newGroup.setUsername(groupID.getText());
-            
-            groupGroups.addUser(newGroup);
+            Groups newGroup = new Groups(groupID.getText());
+
+            rootGroup.addUser(newGroup);
 
             selectedNode.add(newNode);
 
@@ -260,20 +259,21 @@ public class AdminView extends javax.swing.JFrame {
             DefaultTreeModel model = (DefaultTreeModel)usersTree.getModel();
 
             model.reload();
+            groupCounter++;
         }
     }//GEN-LAST:event_addGroupActionPerformed
 
     private void showUserTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showUserTotalActionPerformed
         // TODO add your handling code here:
-        totalUsers = userGroups.getTotalUsers();
+        totalUsers = userCounter;
         //System.out.println(totalUsers);
-        JOptionPane.showMessageDialog(null, "Total Users: " + totalUsers);
+        JOptionPane.showMessageDialog(null, "Total Users: " + userCounter);
     }//GEN-LAST:event_showUserTotalActionPerformed
 
     private void showGroupTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showGroupTotalActionPerformed
         // TODO add your handling code here:
-        totalGroups = groupGroups.getTotalUsers();
-        JOptionPane.showMessageDialog(null, "Total Groups: " + totalGroups);
+        totalGroups = groupCounter;
+        JOptionPane.showMessageDialog(null, "Total Groups: " + groupCounter);
     }//GEN-LAST:event_showGroupTotalActionPerformed
 
     /**

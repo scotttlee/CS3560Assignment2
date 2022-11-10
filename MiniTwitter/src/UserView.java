@@ -1,3 +1,8 @@
+
+import java.util.Enumeration;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -9,16 +14,50 @@
  */
 public class UserView extends javax.swing.JFrame {
 
+    DefaultMutableTreeNode root;
     /**
      * Creates new form UserView
      */
     public UserView(Users user) {
         Users currentUsername = user;
         String username = currentUsername.getUsername();
+        root = currentUsername.getRoot();
         
         initComponents();
         currentUser.setText(username);
+        
     }
+    
+    public void findUser(DefaultMutableTreeNode node, String username) {
+
+        int childCount = node.getChildCount();
+        //System.out.println("child count = " + childCount);
+
+        //System.out.println(node);
+        System.out.println("username: " + username);
+
+        for (int i = 0; i < childCount; i++) {
+
+            DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) node.getChildAt(i);
+            //System.out.println(childNode.toString());
+            //System.out.println(childNode.getChildCount());
+            if(childNode.getChildCount() == 0 ) {
+                Users childUser = (Users) childNode.getUserObject();
+                //System.out.println(childUser.toString());
+                if(childUser.toString().equals(username)){
+                    System.out.println("found " + childUser.toString());
+                    break;
+                }
+            }
+            if(childNode.getAllowsChildren() == true){
+                i++;
+                findUser(childNode, username);
+            }
+        }
+            
+    }
+  
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -49,6 +88,11 @@ public class UserView extends javax.swing.JFrame {
         jScrollPane1.setViewportView(userID);
 
         followUser.setText("Follow User");
+        followUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                followUserActionPerformed(evt);
+            }
+        });
 
         currentFollowing.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -121,6 +165,11 @@ public class UserView extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void followUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_followUserActionPerformed
+        // TODO add your handling code here:
+        findUser(root, userID.getText());
+    }//GEN-LAST:event_followUserActionPerformed
 
     /**
      * @param args the command line arguments

@@ -2,6 +2,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -15,19 +16,18 @@ import java.util.UUID;
 public class Groups implements usersInterface{
     private String userID;
     private String username;
+    private DefaultMutableTreeNode root;
     private int counter;
     
     private List<usersInterface> childUsers;
     
-    public Groups(){
+    public Groups(String username){
         userID = UUID.randomUUID().toString();
+        this.username = username;
         this.childUsers = new ArrayList<>();
+        this.root = root;
     }
-    
-    @Override
-    public void setUsername(String a){
-        username = a;
-    }
+
     
     @Override
     public String getID(){
@@ -53,7 +53,13 @@ public class Groups implements usersInterface{
         return counter;
     }
     
-    public void setRootName(){
-        username = "root";
+    public boolean isGroup(){
+        return false;
+    }
+    
+    
+    @Override
+    public DefaultMutableTreeNode getRoot(){
+        return root;
     }
 }

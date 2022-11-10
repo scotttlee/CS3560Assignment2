@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 import java.util.UUID;
+import javax.swing.tree.DefaultMutableTreeNode;
 /**
  *
  * @author Sudis
@@ -10,15 +11,14 @@ import java.util.UUID;
 public class Users implements usersInterface{
     private String userID;
     private String username;
+    private DefaultMutableTreeNode root;
     
-    public Users(){
-        userID = UUID.randomUUID().toString();
+    public Users(String username, DefaultMutableTreeNode root){
+        this.userID = UUID.randomUUID().toString();
+        this.username = username;
+        this.root = root;
     }
-    
-    @Override
-    public void setUsername(String a){
-        username = a;
-    }
+
     @Override
     public String getID(){
         return this.userID;
@@ -32,6 +32,11 @@ public class Users implements usersInterface{
     @Override
     public String toString(){
         return username;
+    }
+    
+    @Override
+    public DefaultMutableTreeNode getRoot(){
+        return root;
     }
     
   
