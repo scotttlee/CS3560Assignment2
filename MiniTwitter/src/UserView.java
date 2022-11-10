@@ -31,27 +31,34 @@ public class UserView extends javax.swing.JFrame {
     public void findUser(DefaultMutableTreeNode node, String username) {
 
         int childCount = node.getChildCount();
+        System.out.println("child count: " + childCount);
         //System.out.println("child count = " + childCount);
 
         //System.out.println(node);
         //System.out.println("username: " + username);
 
         for (int i = 0; i < childCount; i++) {
-            System.out.println(i);
+            
+            System.out.println("iterations: " + i);
             DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) node.getChildAt(i);
-            //System.out.println(childNode.toString());
+            System.out.println(childNode.toString());
             //System.out.println(childNode.getChildCount());
-            if(childNode.getChildCount() == 0 ) {
+            if(childNode.isLeaf()) {
                 Users childUser = (Users) childNode.getUserObject();
+                System.out.println("child user: " + childUser);
                 //System.out.println(childUser.toString());
                 if(childUser.toString().equals(username)){
                     System.out.println("found " + childUser.toString());
-                    break;
+                    //return;
                 }
             }
-            else{
-                i++;
+            if(childNode.getAllowsChildren()){
+                //i++;
+                System.out.println("recursive call");
                 findUser(childNode, username);
+            }
+            if(i+1 == childCount){
+                return;
             }
         }
             
