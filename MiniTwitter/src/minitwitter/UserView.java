@@ -1,3 +1,10 @@
+/**
+ *
+ * @author scottlee
+ */
+
+package minitwitter;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,37 +14,43 @@ import javax.swing.ListModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-
-/**
- *
- * @author scottlee
- */
 public class UserView extends javax.swing.JFrame {
 
+    //initializing root node and user
     DefaultMutableTreeNode root;
     Users currentUsername;
+    
+    //initializing followers list and news feed
     DefaultListModel followerList = new DefaultListModel();
     DefaultListModel newsFeedList = new DefaultListModel();
-
     
-    
-    /**
-     * Creates new form UserView
-     */
+    //UserView accepts a user and a group to determine what user from what group to open their specific user panel
     public UserView(Users user, Groups group) {
         currentUsername = user;
         String username = currentUsername.getUsername();
         root = currentUsername.getRoot();
+        
+        //store the followers and newsfeed into their corresponding lists to display on the jframe
         followerList = currentUsername.getFollowers();
         newsFeedList = currentUsername.getNewsFeedList();
+        
         initComponents();
+        
+        //show the current user's name on the top left of the frame
         currentUser.setText(username);
+        
+        //place labels for the follower list and news feed list
+        if(followerList.isEmpty()){
+            followerList.addElement("Follower List:");
+        }
+        if(newsFeedList.isEmpty()){
+            newsFeedList.addElement("News Feed:");
+        }
+        
     }
     
+    //traverse through the jtree to find the specified user to follow
+    //user = current user, node = root node, username = user to follow
     public void findUser(Users user, DefaultMutableTreeNode node, String username) {
 
         int childCount = node.getChildCount();
@@ -45,18 +58,21 @@ public class UserView extends javax.swing.JFrame {
         for (int i = 0; i < childCount; i++) {
             
             DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) node.getChildAt(i);
+            //if child is a leaf, check if it is the user to follow
             if(childNode.isLeaf()) {
                 Users childUser = (Users) childNode.getUserObject();
                 if(childUser.toString().equals(username)){
+                    //if it is user to follow, add that user to the current user's following list and attach using observer design pattern
                     currentUsername.addFollowers(childUser);
                     childUser.attach(currentUsername);
-                    //followerList.addElement(childUser);
                     
                 }
             }
+            //if the node being looked at is a group, then recursively call the method again to look at the leaf nodes within the group
             if(childNode.getAllowsChildren()){
                 findUser(currentUsername, childNode, username);
             }
+            //if there are no more leafs in the parent node, break out of the method call and continue previous recursive call, or end method if tree only consists of users
             if(i+1 == childCount){
                 return;
             }
@@ -117,7 +133,8 @@ public class UserView extends javax.swing.JFrame {
         newsFeed.setModel(newsFeedList);
         jScrollPane4.setViewportView(newsFeed);
 
-        currentUser.setText("jLabel1");
+        currentUser.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        currentUser.setText("Scott");
         currentUser.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -133,7 +150,8 @@ public class UserView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(postTweet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(currentUser, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25)
+                        .addComponent(currentUser, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -170,51 +188,19 @@ public class UserView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void followUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_followUserActionPerformed
-        // TODO add your handling code here:
+        //find the user and follow them when follow button is clicked
         findUser(currentUsername, root, userID.getText());
         
     }//GEN-LAST:event_followUserActionPerformed
 
     private void postTweetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postTweetActionPerformed
-        // TODO add your handling code here:
+        //retrieve string from tweet textfield and tweet from current user
         String tweet = tweetMessage.getText();
         currentUsername.tweet(tweet);
-        //newsFeedList.addElement(currentUsername.getNewsFeedList());
     }//GEN-LAST:event_postTweetActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(UserView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(UserView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(UserView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(UserView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        /*java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new UserView().setVisible(true);
-            }
-        });*/
+        //no main method needed, as adminview opens the frame
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

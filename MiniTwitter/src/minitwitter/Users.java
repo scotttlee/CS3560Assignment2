@@ -1,17 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+/**
+ *
+ * @author scottlee
  */
+
+package minitwitter;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import javax.swing.DefaultListModel;
 import javax.swing.tree.DefaultMutableTreeNode;
-/**
- *
- * @author Sudis
- */
+
 public class Users extends UserSubject implements usersInterface, UserObserver{
     private String userID;
     private String username;
@@ -21,13 +20,14 @@ public class Users extends UserSubject implements usersInterface, UserObserver{
     private List<String> userTweets = new ArrayList<>();
     private DefaultListModel newsFeed = new DefaultListModel();
     
-    
+    //set user ID, username, and root parent
     public Users(String username, DefaultMutableTreeNode root){
         this.userID = UUID.randomUUID().toString();
         this.username = username;
         this.root = root;
     }
     
+    //add followers to user's followersList and add element to jlist
     public void addFollowers(Users user){
         followers.add(user);
         followerList.addElement(user);
@@ -37,10 +37,16 @@ public class Users extends UserSubject implements usersInterface, UserObserver{
         return followerList;
     }
     
+    //tweet from user and update their follower's with that tweet
     public void tweet(String tweet){
         userTweets.add(tweet);
         newsFeed.addElement(this.getUsername() + ": " + tweet);
+        //update their follower's with that tweet using observer pattern
         updateFollowers(tweet);
+    }
+    
+    public List<String> getTweets(){
+        return userTweets;
     }
     
     public DefaultListModel<String> getNewsFeedList(){
@@ -67,6 +73,7 @@ public class Users extends UserSubject implements usersInterface, UserObserver{
         return root;
     }
 
+    //update subjects of the observer with the tweet and add into their news feed
     @Override
     public void update(UserSubject subject, String tweet) {
         if(subject instanceof Users){
@@ -74,5 +81,9 @@ public class Users extends UserSubject implements usersInterface, UserObserver{
         }
     }
     
-  
+    //visitor design pattern to accept
+    @Override
+    public void accept(VisitorInterface visitor){
+        visitor.visitUser(this);
+    }
 }

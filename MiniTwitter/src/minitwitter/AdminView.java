@@ -1,15 +1,18 @@
+/**
+ *
+ * @author scottlee
+ */
+
+package minitwitter;
+
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 import javax.swing.JOptionPane;
-import java.awt.Component;
-
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-
+import visitor.TotalGroupsVisitor;
+import visitor.TotalMessagesVisitor;
+import visitor.TotalUsersVisitor;
 /**
  *
  * @author scottlee
@@ -19,11 +22,7 @@ public class AdminView extends javax.swing.JFrame {
 
     Groups rootGroup = new Groups("root");
 
-    private int userCounter;
-    private int groupCounter;
-    private int totalUsers;
-    private int totalGroups;
-
+    //singleton design pattern by initializing a single AdminView
     private static AdminView admin = new AdminView();
 
     public static AdminView getInstance() {
@@ -32,18 +31,10 @@ public class AdminView extends javax.swing.JFrame {
         }
         return admin;
     }
-    /**
-     * Creates new form Driver
-     */
+
     private AdminView() {
         initComponents();
-
-
     }
-
-
-
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -69,7 +60,7 @@ public class AdminView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode(rootGroup);
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Root");
         usersTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         jScrollPane1.setViewportView(usersTree);
 
@@ -198,33 +189,34 @@ public class AdminView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserActionPerformed
-        // TODO add your handling code here:
+
+        
+        //add users to jtree and update on button click
         TreeSelectionModel check = usersTree.getSelectionModel();
 
+        //user must select a group in order to add a user
         if(check.getSelectionCount() > 0 ){
+            
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)usersTree.getSelectionPath().getLastPathComponent();
             DefaultTreeModel model = (DefaultTreeModel) usersTree.getModel();
-
             DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
-
             Users newUser = new Users(userID.getText(), root);
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newUser, false);
 
+            //add new user as a child to the selected node in the jtree
             selectedNode.add(newNode);
-
-
+            //add new user to the group through composite class
             rootGroup.addUser(newUser);
 
+            //refresh the jtree model to show changes after adding a user
             DefaultTreeModel modelRefresh = (DefaultTreeModel)usersTree.getModel();
-
-
             modelRefresh.reload();
-            userCounter++;
         }
     }//GEN-LAST:event_addUserActionPerformed
 
     private void openUserViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openUserViewActionPerformed
-        // TODO add your handling code here:
+
+        //pass selected user in the jtree to open the user view for that specific user
         DefaultMutableTreeNode selectedUser = (DefaultMutableTreeNode)usersTree.getSelectionPath().getLastPathComponent();
         Users openUser = (Users)selectedUser.getUserObject();
 
@@ -233,78 +225,67 @@ public class AdminView extends javax.swing.JFrame {
     }//GEN-LAST:event_openUserViewActionPerformed
 
     private void showPositivePercentageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPositivePercentageActionPerformed
-        // TODO add your handling code here:
+
+        //using visitor design pattern, pass positivity check visitor to check for positive messages ratio
+        PositivityCheckVisitor posVisitor = new PositivityCheckVisitor();
+        rootGroup.accept(posVisitor);
+        double posPercentage = posVisitor.getPositivePercentage();
+        JOptionPane.showMessageDialog(null, "Positive percentage: " + posPercentage + "%");
     }//GEN-LAST:event_showPositivePercentageActionPerformed
 
     private void showMessagesTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showMessagesTotalActionPerformed
         // TODO add your handling code here:
+        //using visitor design pattern, pass total number of messages visitor to check for number of messages
+        TotalMessagesVisitor numMessagesVisitor = new TotalMessagesVisitor();
+        rootGroup.accept(numMessagesVisitor);
+        int numMessages = numMessagesVisitor.getNumMessages();
+        JOptionPane.showMessageDialog(null, "Total Messages: " + numMessages);
+        
     }//GEN-LAST:event_showMessagesTotalActionPerformed
 
     private void addGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGroupActionPerformed
-        // TODO add your handling code here:
+
+        //add groups to jtree and update on button click
         TreeSelectionModel check = usersTree.getSelectionModel();
 
+        //user must select a group in order to add another group
         if(check.getSelectionCount() > 0){
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)usersTree.getSelectionPath().getLastPathComponent();
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(groupID.getText(), true);
-
             Groups newGroup = new Groups(groupID.getText());
 
+            //add new group as a child to the selected node in the jtree
+            selectedNode.add(newNode);
+            
+            //add group to composite group class
             rootGroup.addUser(newGroup);
 
-            selectedNode.add(newNode);
-
-
-
+            //refresh the jtree model to show changes after adding a group
             DefaultTreeModel model = (DefaultTreeModel)usersTree.getModel();
 
             model.reload();
-            groupCounter++;
         }
     }//GEN-LAST:event_addGroupActionPerformed
 
     private void showUserTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showUserTotalActionPerformed
-        // TODO add your handling code here:
-        totalUsers = userCounter;
-        //System.out.println(totalUsers);
-        JOptionPane.showMessageDialog(null, "Total Users: " + userCounter);
+
+        //using visitor pattern design, pass total number of users visitor to check for the number of users
+        TotalUsersVisitor numTotalUsersVisitor = new TotalUsersVisitor();
+        rootGroup.accept(numTotalUsersVisitor);
+        int numUsers = numTotalUsersVisitor.getNumUsers();
+        JOptionPane.showMessageDialog(null, "Total Users: " + numUsers);
     }//GEN-LAST:event_showUserTotalActionPerformed
 
     private void showGroupTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showGroupTotalActionPerformed
-        // TODO add your handling code here:
-        totalGroups = groupCounter;
-        JOptionPane.showMessageDialog(null, "Total Groups: " + groupCounter);
+
+        //using visitor pattern design, pass total number of groups visitor to check for the number of groups
+        TotalGroupsVisitor numTotalGroupsVisitor = new TotalGroupsVisitor();
+        rootGroup.accept(numTotalGroupsVisitor);
+        int numGroups = numTotalGroupsVisitor.getNumGroups();
+        JOptionPane.showMessageDialog(null, "Total Groups: " + numGroups);
     }//GEN-LAST:event_showGroupTotalActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AdminView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AdminView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AdminView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AdminView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

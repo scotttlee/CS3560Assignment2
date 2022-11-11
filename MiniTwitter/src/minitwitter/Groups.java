@@ -1,26 +1,23 @@
+/**
+ *
+ * @author scottlee
+ */
+
+package minitwitter;
+
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author Sudis
- */
 public class Groups implements usersInterface{
     private String userID;
     private String username;
     private DefaultMutableTreeNode root;
-    private int counter;
-    
     private List<usersInterface> childUsers;
     
+    //set group ID, username, children users, and group parents
     public Groups(String username){
         userID = UUID.randomUUID().toString();
         this.username = username;
@@ -28,7 +25,6 @@ public class Groups implements usersInterface{
         this.root = root;
     }
 
-    
     @Override
     public String getID(){
         return this.userID;
@@ -46,15 +42,23 @@ public class Groups implements usersInterface{
     
     public void addUser(usersInterface user){
         childUsers.add(user);
-        counter++;
-    }
-    
-    public int getTotalUsers(){
-        return counter;
     }
 
     @Override
     public DefaultMutableTreeNode getRoot(){
         return root;
+    }
+    
+    //visitor design pattern to accept
+    @Override
+    public void accept(VisitorInterface visitor){
+        visitor.visitGroup(this);
+        for(usersInterface members : childUsers){
+            if(members instanceof Users){
+                members.accept(visitor);
+            } else if(members instanceof Groups){
+                members.accept(visitor);
+            }
+        }
     }
 }
