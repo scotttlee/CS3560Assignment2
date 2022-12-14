@@ -16,6 +16,8 @@ public interface usersInterface {
     
     public String toString();
     
+    public long getCreationTime();
+    
     public DefaultMutableTreeNode getRoot();
     
     public void accept(VisitorInterface visitor);

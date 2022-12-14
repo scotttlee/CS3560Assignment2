@@ -19,13 +19,16 @@ public class Users extends UserSubject implements usersInterface, UserObserver{
     private DefaultListModel followerList = new DefaultListModel();
     private List<String> userTweets = new ArrayList<>();
     private DefaultListModel newsFeed = new DefaultListModel();
+    private long creationTime;
     
     //set user ID, username, and root parent
     public Users(String username, DefaultMutableTreeNode root){
         this.userID = UUID.randomUUID().toString();
         this.username = username;
         this.root = root;
+        this.creationTime = System.currentTimeMillis();
     }
+    
     
     //add followers to user's followersList and add element to jlist
     public void addFollowers(Users user){
@@ -69,6 +72,11 @@ public class Users extends UserSubject implements usersInterface, UserObserver{
     }
     
     @Override
+    public long getCreationTime(){
+        return creationTime;
+    }
+    
+    @Override
     public DefaultMutableTreeNode getRoot(){
         return root;
     }
@@ -86,4 +94,6 @@ public class Users extends UserSubject implements usersInterface, UserObserver{
     public void accept(VisitorInterface visitor){
         visitor.visitUser(this);
     }
+    
+    
 }

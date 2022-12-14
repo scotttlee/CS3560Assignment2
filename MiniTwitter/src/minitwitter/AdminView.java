@@ -6,6 +6,8 @@
 package minitwitter;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
@@ -21,6 +23,7 @@ public class AdminView extends javax.swing.JFrame {
 
 
     Groups rootGroup = new Groups("root");
+    List<usersInterface> list = new ArrayList<>();
 
     //singleton design pattern by initializing a single AdminView
     private static AdminView admin = new AdminView();
@@ -57,6 +60,7 @@ public class AdminView extends javax.swing.JFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         userID = new javax.swing.JTextArea();
         showPositivePercentage = new javax.swing.JButton();
+        validateID = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -129,6 +133,13 @@ public class AdminView extends javax.swing.JFrame {
             }
         });
 
+        validateID.setText("Validate IDs");
+        validateID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                validateIDActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -137,7 +148,7 @@ public class AdminView extends javax.swing.JFrame {
                 .addGap(6, 6, 6)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)
@@ -146,7 +157,6 @@ public class AdminView extends javax.swing.JFrame {
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)
                         .addComponent(addGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(openUserView, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(showUserTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)
@@ -154,7 +164,12 @@ public class AdminView extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(showMessagesTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)
-                        .addComponent(showPositivePercentage, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(showPositivePercentage, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(openUserView, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(validateID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -171,7 +186,9 @@ public class AdminView extends javax.swing.JFrame {
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(addGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(6, 6, 6)
-                        .addComponent(openUserView, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(openUserView, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                            .addComponent(validateID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(6, 6, 6)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(showUserTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -202,11 +219,12 @@ public class AdminView extends javax.swing.JFrame {
             DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
             Users newUser = new Users(userID.getText(), root);
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newUser, false);
-
+            
             //add new user as a child to the selected node in the jtree
             selectedNode.add(newNode);
             //add new user to the group through composite class
             rootGroup.addUser(newUser);
+            System.out.println("added: " + newUser);
 
             //refresh the jtree model to show changes after adding a user
             DefaultTreeModel modelRefresh = (DefaultTreeModel)usersTree.getModel();
@@ -285,6 +303,23 @@ public class AdminView extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "Total Groups: " + numGroups);
     }//GEN-LAST:event_showGroupTotalActionPerformed
 
+    private void validateIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_validateIDActionPerformed
+        // Validate ID's
+        String newGroup = groupID.getText();
+        String newUser = userID.getText();
+
+        
+        list = rootGroup.getObject();
+        for(int i = 0; i < list.size(); i++){
+            if(list.get(i).getUsername().equals(userID.getText()) || list.get(i).getUsername().equals(groupID.getText())){
+                JOptionPane.showMessageDialog(null, "Invalid, same ID's");
+            }
+        }
+        if(newGroup.contains(" ") || newUser.contains(" ")){
+            JOptionPane.showMessageDialog(null, "Invalid, ID contains space");
+        }
+    }//GEN-LAST:event_validateIDActionPerformed
+
     public static void main(String args[]) {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -308,5 +343,6 @@ public class AdminView extends javax.swing.JFrame {
     private javax.swing.JButton showUserTotal;
     private javax.swing.JTextArea userID;
     private javax.swing.JTree usersTree;
+    private javax.swing.JButton validateID;
     // End of variables declaration//GEN-END:variables
 }

@@ -16,6 +16,7 @@ public class Groups implements usersInterface{
     private String username;
     private DefaultMutableTreeNode root;
     private List<usersInterface> childUsers;
+    private long creationTime;
     
     //set group ID, username, children users, and group parents
     public Groups(String username){
@@ -23,6 +24,10 @@ public class Groups implements usersInterface{
         this.username = username;
         this.childUsers = new ArrayList<>();
         this.root = root;
+    }
+    
+    public List<usersInterface> getObject(){
+        return childUsers;
     }
 
     @Override
@@ -38,6 +43,11 @@ public class Groups implements usersInterface{
     @Override
     public String toString(){
         return username;
+    }
+    
+    @Override
+    public long getCreationTime(){
+        return creationTime;
     }
     
     public void addUser(usersInterface user){
@@ -61,4 +71,7 @@ public class Groups implements usersInterface{
             }
         }
     }
+    
+    
+    
 }
