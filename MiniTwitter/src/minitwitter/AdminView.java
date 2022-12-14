@@ -24,6 +24,7 @@ public class AdminView extends javax.swing.JFrame {
 
     Groups rootGroup = new Groups("root");
     List<usersInterface> list = new ArrayList<>();
+    Boolean check;
 
     //singleton design pattern by initializing a single AdminView
     private static AdminView admin = new AdminView();
@@ -224,7 +225,8 @@ public class AdminView extends javax.swing.JFrame {
             selectedNode.add(newNode);
             //add new user to the group through composite class
             rootGroup.addUser(newUser);
-            System.out.println("added: " + newUser);
+            System.out.println(newUser.getUsername() + " created at " + newUser.getCreationTime());
+            
 
             //refresh the jtree model to show changes after adding a user
             DefaultTreeModel modelRefresh = (DefaultTreeModel)usersTree.getModel();
@@ -277,6 +279,7 @@ public class AdminView extends javax.swing.JFrame {
             
             //add group to composite group class
             rootGroup.addUser(newGroup);
+            System.out.println(newGroup.getUsername() + " created at " + newGroup.getCreationTime());
 
             //refresh the jtree model to show changes after adding a group
             DefaultTreeModel model = (DefaultTreeModel)usersTree.getModel();
@@ -312,8 +315,13 @@ public class AdminView extends javax.swing.JFrame {
         list = rootGroup.getObject();
         for(int i = 0; i < list.size(); i++){
             if(list.get(i).getUsername().equals(userID.getText()) || list.get(i).getUsername().equals(groupID.getText())){
-                JOptionPane.showMessageDialog(null, "Invalid, same ID's");
+                check = true;
+            } else{
+                check = false;
             }
+        }
+        if(check = true){
+            JOptionPane.showMessageDialog(null, "Invalid, same ID's");
         }
         if(newGroup.contains(" ") || newUser.contains(" ")){
             JOptionPane.showMessageDialog(null, "Invalid, ID contains space");

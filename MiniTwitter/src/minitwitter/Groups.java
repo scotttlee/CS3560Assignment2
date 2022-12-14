@@ -24,6 +24,7 @@ public class Groups implements usersInterface{
         this.username = username;
         this.childUsers = new ArrayList<>();
         this.root = root;
+        this.creationTime = System.currentTimeMillis();
     }
     
     public List<usersInterface> getObject(){
