@@ -311,7 +311,7 @@ public class AdminView extends javax.swing.JFrame {
         String newGroup = groupID.getText();
         String newUser = userID.getText();
 
-        
+        //check if any user or group in the rootgroup is equal to another, if so, check = true
         list = rootGroup.getObject();
         for(int i = 0; i < list.size(); i++){
             if(list.get(i).getUsername().equals(userID.getText()) || list.get(i).getUsername().equals(groupID.getText())){
@@ -320,10 +320,12 @@ public class AdminView extends javax.swing.JFrame {
                 check = false;
             }
         }
+        //if check is true then invalidate id's
         if(check = true){
             JOptionPane.showMessageDialog(null, "Invalid, same ID's");
         }
-        if(newGroup.contains(" ") || newUser.contains(" ")){
+        //if group or user contains space then invalidate ids
+        if(newUser.contains(" ") || newGroup.contains(" ")){
             JOptionPane.showMessageDialog(null, "Invalid, ID contains space");
         }
     }//GEN-LAST:event_validateIDActionPerformed

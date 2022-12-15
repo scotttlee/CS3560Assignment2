@@ -20,6 +20,7 @@ public class Users extends UserSubject implements usersInterface, UserObserver{
     private List<String> userTweets = new ArrayList<>();
     private DefaultListModel newsFeed = new DefaultListModel();
     private long creationTime;
+    private long lastUpdatedTime;
     
     //set user ID, username, and root parent
     public Users(String username, DefaultMutableTreeNode root){
@@ -46,6 +47,10 @@ public class Users extends UserSubject implements usersInterface, UserObserver{
         newsFeed.addElement(this.getUsername() + ": " + tweet);
         //update their follower's with that tweet using observer pattern
         updateFollowers(tweet);
+    }
+    
+    public long getLastUpdatedTime(){
+        return lastUpdatedTime;
     }
     
     public List<String> getTweets(){
@@ -81,11 +86,13 @@ public class Users extends UserSubject implements usersInterface, UserObserver{
         return root;
     }
 
-    //update subjects of the observer with the tweet and add into their news feed
+    //update subjects of the observer with the tweet and add into their news feed, added last updated time
     @Override
     public void update(UserSubject subject, String tweet) {
         if(subject instanceof Users){
             this.newsFeed.addElement(((Users) subject).getUsername() + ": " + tweet);
+            lastUpdatedTime = System.currentTimeMillis();
+            System.out.println("Last updated time for " + ((Users) subject).getUsername() + ": "+ lastUpdatedTime);
         }
     }
     
